@@ -1,13 +1,13 @@
 import { FastifyInstance, FastifyReply } from "fastify";
-import { ReviewSetMassageBodyRequest } from "../../type/handler/massage";
+import { ReviewSingleMassageBodyRequest } from "../../../type/handler/massage";
 
-export const handleReviewSetMassage = async (
-  request: ReviewSetMassageBodyRequest,
+export const handleReviewSingleMassage = async (
+  request: ReviewSingleMassageBodyRequest,
   reply: FastifyReply,
   app: FastifyInstance
 ) => {
   try {
-    const { email, ms_id, rating, detail, datetime } = request.body;
+    const { email, mt_id, rating, detail, datetime } = request.body;
     const client = await app.pg.connect();
     const userQuery = await client.query(
       `
@@ -27,21 +27,21 @@ export const handleReviewSetMassage = async (
 
     const { rows } = await client.query(
       `
-        INSERT INTO public."ReviewSetMassage"(
-          ms_id, id, rating, detail, datetime
+        INSERT INTO public."ReviewSingleMassage"(
+          mt_id, id, rating, detail, datetime
         )
         VALUES ($1, $2, $3, $4, $5) RETURNING *;
       `,
-      [ms_id, id, rating, detail, datetime]
+      [mt_id, id, rating, detail, datetime]
     );
 
     return reply.status(201).send({
-      message: "Add Your Set Massage's Review Successfully",
+      message: "Add Your Single Massage's Review Successfully",
       data: rows[0],
     });
   } catch (err) {
     return reply
       .status(500)
-      .send({ error: err, message: "Can't Add Your Set Massage's Review" });
+      .send({ error: err, message: "Can't Add Your Single Massage's Review" });
   }
 };

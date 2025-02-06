@@ -1,14 +1,14 @@
 import { FastifyInstance, FastifyReply } from "fastify";
-import { getStatus } from "../../util/learning_status";
-import { RecordSingleMassageBodyRequest } from "../../type/handler/massage";
+import { getStatus } from "../../../util/learning_status";
+import { RecordSetMassageBodyRequest } from "../../../type/handler/massage";
 
-export const handleRecordSingleMassage = async (
-  request: RecordSingleMassageBodyRequest,
+export const handleRecordSetMassage = async (
+  request: RecordSetMassageBodyRequest,
   reply: FastifyReply,
   app: FastifyInstance
 ) => {
   try {
-    const { email, mt_id, learning_round, learning_time, datetime } =
+    const { email, ms_id, learning_round, learning_time, datetime } =
       request.body;
     const client = await app.pg.connect();
     const userQuery = await client.query(
@@ -30,9 +30,9 @@ export const handleRecordSingleMassage = async (
     const massageQuery = await client.query(
       `
         SELECT * FROM public."MassageTechnique"
-        WHERE mt_id = $1;
+        WHERE ms_id = $1;
       `,
-      [mt_id]
+      [ms_id]
     );
 
     if (massageQuery.rowCount < 1) {
@@ -54,11 +54,11 @@ export const handleRecordSingleMassage = async (
     const { rows } = await client.query(
       `
         INSERT INTO public."SingleHistory"(
-          mt_id, id, learning_time, learning_round, status, datetime
+          ms_id, id, learning_time, learning_round, status, datetime
         )
         VALUES ($1, $2, $3, $4, $5) RETURNING *;
       `,
-      [mt_id, id, learning_time, learning_round, status, datetime]
+      [ms_id, id, learning_time, learning_round, status, datetime]
     );
 
     return reply.status(201).send({

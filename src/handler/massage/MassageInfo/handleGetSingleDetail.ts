@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply } from "fastify";
-import { SingleMassageDetailBodyRequest } from "../../type/handler/massage";
+import { SingleMassageDetailBodyRequest } from "../../../type/handler/massage";
 
 export const handleGetSingleDetail = async (
   request: SingleMassageDetailBodyRequest,

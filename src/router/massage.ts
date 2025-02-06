@@ -9,16 +9,16 @@ import {
   RecordSingleMassageBodyRequest,
   RecordSetMassageBodyRequest,
 } from "../type/handler/massage";
-import { handleGetSingleDetail } from "../handler/massage/handleGetSingleDetail";
-import { handleGetSetDetail } from "../handler/massage/handleGetSetDetail";
-import { handleGetSingleLists } from "../handler/massage/handleGetSingleLists";
-import { handleGetSetLists } from "../handler/massage/handleGetSetLists";
-import { handleGetSingleReviews } from "../handler/massage/handleGetSingleReviews";
-import { handleGetSetReviews } from "../handler/massage/handleGetSetReviews";
-import { handleReviewSingleMassage } from "../handler/massage/handleReviewSingleMassage";
-import { handleReviewSetMassage } from "../handler/massage/handleReviewSetMassage";
-import { handleRecordSingleMassage } from "../handler/massage/handleRecordSingleMassage";
-import { handleRecordSetMassage } from "../handler/massage/handleRecordSetMassage";
+import { handleGetSingleDetail } from "../handler/massage/MassageInfo/handleGetSingleDetail";
+import { handleGetSetDetail } from "../handler/massage/MassageInfo/handleGetSetDetail";
+import { handleGetSingleLists } from "../handler/massage/MassageInfo/handleGetSingleLists";
+import { handleGetSetLists } from "../handler/massage/MassageInfo/handleGetSetLists";
+import { handleGetSingleReviews } from "../handler/massage/Reviews/handleGetSingleReviews";
+import { handleGetSetReviews } from "../handler/massage/Reviews/handleGetSetReviews";
+import { handleReviewSingleMassage } from "../handler/massage/Reviews/handleReviewSingleMassage";
+import { handleReviewSetMassage } from "../handler/massage/Reviews/handleReviewSetMassage";
+import { handleRecordSingleMassage } from "../handler/massage/Records/handleRecordSingleMassage";
+import { handleRecordSetMassage } from "../handler/massage/Records/handleRecordSetMassage";
 
 const massageRouter = async (app: FastifyInstance) => {
   // Fetch List of Single Massage Techniques

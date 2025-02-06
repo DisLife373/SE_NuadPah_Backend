@@ -63,3 +63,9 @@ export type RecordSetMassageBodyRequest = FastifyRequest<{
     datetime: string; // Use string for convert to ISO string later;
   };
 }>;
+
+export type RecommendSingleMassageBodyRequest = FastifyRequest<{
+  Body: {
+    email: string;
+  };
+}>;
