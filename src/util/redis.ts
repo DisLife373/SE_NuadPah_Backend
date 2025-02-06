@@ -3,7 +3,7 @@ import { spawn } from "child_process";
 import path from "path";
 import config from "../config/config";
 
-const redisServerPath = path.resolve("C:\\Redis", "redis-server.exe");
+const redisServerPath = path.resolve("C:\\Program Files\\Redis", "redis-server.exe");
 
 const startRedis = () => {
   const redisServer = spawn(redisServerPath);
