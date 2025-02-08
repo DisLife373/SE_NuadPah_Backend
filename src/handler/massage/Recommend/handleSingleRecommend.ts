@@ -1,8 +1,9 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { RecommendSingleMassageBodyRequest } from "../../../type/handler/massage";
 import redis from "../../../util/redis";
+import crypto from "crypto";
 
-export const handleGetSingleDetail = async (
+export const handleSingleRecommend = async (
   request: RecommendSingleMassageBodyRequest,
   reply: FastifyReply,
   app: FastifyInstance
@@ -14,7 +15,7 @@ export const handleGetSingleDetail = async (
     const client = await app.pg.connect();
     const { userQuery } = await client.query(
       `
-      SELECT * FROM public."User"
+      SELECT id FROM public."User"
       WHERE email = $1;
     `,
       [email]
@@ -28,17 +29,19 @@ export const handleGetSingleDetail = async (
 
     // Cache the recommendations for 60 seconds
     const cacheKey = `recommendations:${userID}`;
+    const hashKey = `recommendations_hash:${userID}`;
 
-    const cachedData = await redis.get(cacheKey);
-    if (cachedData) {
-      console.log("Cache hit !!!"); 
+    const cachedHash = await redis.get(hashKey);
 
-      return reply.status(200).send({
-        message: "Give Old Recommend Single Massage Technique Successfully",
-        data: JSON.parse(cachedData),
-      });
-    }
-    console.log("Cache miss !!! Querying DB...");
+    // if (cachedData) {
+    //   console.log("Cache hit !!!");
+
+    //   return reply.status(200).send({
+    //     message: "Give Old Recommend Single Massage Technique Successfully",
+    //     data: JSON.parse(cachedData),
+    //   });
+    // }
+    // console.log("Cache miss !!! Querying DB...");
 
     // Query the database if have no old recommendations
     const { rows } = await client.query(
@@ -62,8 +65,20 @@ export const handleGetSingleDetail = async (
       `,
       [userID]
     );
+    const newHash = crypto
+      .createHash("sha256")
+      .update(JSON.stringify(rows))
+      .digest("hex");
 
-    await redis.setex(cacheKey, 60, JSON.stringify(rows)); // 60 seconds
+    if (cachedHash === newHash) {
+      console.log("Cache hit: Data unchanged");
+      const cachedData = await redis.get(cacheKey);
+      if (cachedData) return JSON.parse(cachedData);
+    }
+
+    console.log("Cache miss: Data changed, updating cache");
+    await redis.set(cacheKey, JSON.stringify(rows), "EX", 60); // 60 seconds
+    await redis.set(hashKey, newHash, "EX", 60); // 60 seconds
 
     return reply.status(200).send({
       message: "Give New Recommend Single Massage Technique Successfully",
