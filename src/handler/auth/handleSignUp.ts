@@ -10,20 +10,22 @@ export const handleSignUp = async (
   reply: FastifyReply,
   app: FastifyInstance
 ) => {
-  const { email, firstname, lastname, password } = request.body;
+  try {
+    const { email, firstname, lastname, password } = request.body;
 
-  const client = await app.pg.connect();
-  const { rows } = await client.query(
-    `
+    const client = await app.pg.connect();
+    const userQuery = await client.query(
+      `
       SELECT * FROM public."User"
       WHERE email = $1;
     `,
-    [email]
-  );
+      [email]
+    );
 
-  if (rows.length > 0) {
-    return reply.status(403).send({ error: "Already has this user" });
-  } else {
+    if (userQuery.rows.length > 0) {
+      return reply.status(403).send({ error: "Already has this user" });
+    }
+
     const hashedPW = await hashPassword(password);
     const { rows } = await client.query(
       `
@@ -41,5 +43,8 @@ export const handleSignUp = async (
     await setSession(rows[0].email, { status: "active", token }, 3600); // 1 hour
 
     return reply.status(201).send({ token });
+  } catch (e) {
+    console.error(e);
+    return reply.status(500).send({ error: "Internal Server Error" });
   }
 };
