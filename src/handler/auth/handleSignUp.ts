@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { FastifyInstance, FastifyReply } from "fastify";
-import { hashPassword } from "../../util/bcrypt";
+import { hashPassword } from "../../util/argon2";
 import { setSession } from "../../util/session/setSession";
 import { AuthSignUpBodyRequest } from "../../type/handler/auth";
 import config from "../../config/config";
