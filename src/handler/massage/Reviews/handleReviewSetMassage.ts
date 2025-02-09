@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { ReviewSetMassageBodyRequest } from "../../../type/handler/massage";
+import { clearSetRecommendCache } from "../../../util/recommendation/clearSetRecommendCache";
 
 export const handleReviewSetMassage = async (
   request: ReviewSetMassageBodyRequest,
@@ -34,6 +35,8 @@ export const handleReviewSetMassage = async (
       `,
       [ms_id, id, rating, detail, datetime]
     );
+
+    clearSetRecommendCache(id);
 
     return reply.status(201).send({
       message: "Add Your Set Massage's Review Successfully",

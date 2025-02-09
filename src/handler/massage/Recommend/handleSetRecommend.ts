@@ -3,7 +3,7 @@ import { RecommendMassageBodyRequest } from "../../../type/handler/massage";
 import redis from "../../../util/redis";
 import crypto from "crypto";
 
-export const handleSingleRecommend = async (
+export const handleSetRecommend = async (
   request: RecommendMassageBodyRequest,
   reply: FastifyReply,
   app: FastifyInstance
@@ -28,8 +28,8 @@ export const handleSingleRecommend = async (
     const userID = userQuery.rows[0].id;
 
     // Cache the recommendations for 60 seconds
-    const cacheKey = `single_recommendations:${userID}`; // for data like List of Massage Techniques
-    const hashKey = `single_recommendations_hash:${userID}`; // for hash of that data
+    const cacheKey = `set_recommendations:${userID}`; // for data like List of Massage Techniques
+    const hashKey = `set_recommendations_hash:${userID}`; // for hash of that data
 
     const cachedData = await redis.get(cacheKey);
 
@@ -38,7 +38,7 @@ export const handleSingleRecommend = async (
       console.log("Cache HIT !!!");
 
       return reply.status(200).send({
-        message: "Give Old Recommend Single Massage Technique Successfully",
+        message: "Give Old Recommend Set Massage Technique Successfully",
         data: JSON.parse(cachedData),
       });
     }
@@ -49,20 +49,20 @@ export const handleSingleRecommend = async (
     const { rows, rowCount } = await client.query(
       `
         SELECT
-          mt.mt_id,
-          mt.mt_name,
+          ms.ms_id,
+          ms.ms_name,
           (
             COALESCE(ur.rating, 0) + COALESCE(ar.avg_rating, 0) * 0.6
           ) * CASE
                 WHEN EXISTS (
                     SELECT * FROM "Favorite" f
-                    WHERE f.id = $1 AND f.mt_id = mt.mt_id
+                    WHERE f.id = $1 AND f.ms_id = ms.ms_id
                 )
               THEN 1.3 ELSE 1
             END AS score
-        FROM "MassageTechnique" mt
-        LEFT JOIN user_single_rating ur ON mt.mt_id = ur.mt_id AND ur.id = $1
-        LEFT JOIN avg_single_rating ar ON mt.mt_id = ar.mt_id
+        FROM "MassageTechnique" ms
+        LEFT JOIN user_set_rating ur ON ms.ms_id = ur.ms_id AND ur.id = $1
+        LEFT JOIN avg_set_rating ar ON ms.ms_id = ar.ms_id
         ORDER BY score DESC;
       `,
       [userID]
@@ -86,7 +86,7 @@ export const handleSingleRecommend = async (
 
       return reply.status(200).send({
         message:
-          "Give New Recommend Single Massage Technique Successfully (Not Update Cache)",
+          "Give New Recommend Set Massage Technique Successfully (Not Update Cache)",
         data: rows,
       });
     }
@@ -98,12 +98,12 @@ export const handleSingleRecommend = async (
 
     return reply.status(200).send({
       message:
-        "Give New Recommend Single Massage Technique Successfully (Update Cache)",
+        "Give New Recommend Set Massage Technique Successfully (Update Cache)",
       data: rows,
     });
   } catch (err) {
     return reply
       .status(500)
-      .send({ error: err, message: "Can't Find Single Massage Technique" });
+      .send({ error: err, message: "Can't Find Set Massage Technique" });
   }
 };
