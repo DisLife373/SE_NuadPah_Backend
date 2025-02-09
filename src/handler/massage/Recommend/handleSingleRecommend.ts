@@ -1,10 +1,10 @@
 import { FastifyInstance, FastifyReply } from "fastify";
-import { RecommendSingleMassageBodyRequest } from "../../../type/handler/massage";
+import { RecommendMassageBodyRequest } from "../../../type/handler/massage";
 import redis from "../../../util/redis";
 import crypto from "crypto";
 
 export const handleSingleRecommend = async (
-  request: RecommendSingleMassageBodyRequest,
+  request: RecommendMassageBodyRequest,
   reply: FastifyReply,
   app: FastifyInstance
 ) => {
