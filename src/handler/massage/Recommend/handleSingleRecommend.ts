@@ -1,10 +1,10 @@
 import { FastifyInstance, FastifyReply } from "fastify";
-import { RecommendMassageBodyRequest } from "../../../type/handler/massage";
+import { RecommendSingleMassageBodyRequest } from "../../../type/handler/massage";
 import redis from "../../../util/redis";
 import crypto from "crypto";
 
 export const handleSingleRecommend = async (
-  request: RecommendMassageBodyRequest,
+  request: RecommendSingleMassageBodyRequest,
   reply: FastifyReply,
   app: FastifyInstance
 ) => {
@@ -13,7 +13,7 @@ export const handleSingleRecommend = async (
     const { email } = request.body;
 
     const client = await app.pg.connect();
-    const userQuery = await client.query(
+    const { userQuery } = await client.query(
       `
       SELECT id FROM public."User"
       WHERE email = $1;
@@ -28,36 +28,34 @@ export const handleSingleRecommend = async (
     const userID = userQuery.rows[0].id;
 
     // Cache the recommendations for 60 seconds
-    const cacheKey = `single_recommendations:${userID}`; // for data like List of Massage Techniques
-    const hashKey = `single_recommendations_hash:${userID}`; // for hash of that data
+    const cacheKey = `recommendations:${userID}`;
+    const hashKey = `recommendations_hash:${userID}`;
 
-    const cachedData = await redis.get(cacheKey);
+    const cachedHash = await redis.get(hashKey);
 
-    // Check if the data is cached that means this cache is up to date
-    if (cachedData) {
-      console.log("Cache HIT !!!");
+    // if (cachedData) {
+    //   console.log("Cache hit !!!");
 
-      return reply.status(200).send({
-        message: "Give Old Recommend Single Massage Technique Successfully",
-        data: JSON.parse(cachedData),
-      });
-    }
+    //   return reply.status(200).send({
+    //     message: "Give Old Recommend Single Massage Technique Successfully",
+    //     data: JSON.parse(cachedData),
+    //   });
+    // }
+    // console.log("Cache miss !!! Querying DB...");
 
-    console.log("Cache MISS !!! Querying DB...");
-
-    // Query new Recommendation if have no old recommendations
-    const { rows, rowCount } = await client.query(
+    // Query the database if have no old recommendations
+    const { rows } = await client.query(
       `
-        SELECT
-          mt.mt_id,
-          mt.mt_name,
+        SELECT 
+          mt.mt_id, 
+          mt.mt_name, 
           (
             COALESCE(ur.rating, 0) + COALESCE(ar.avg_rating, 0) * 0.6
-          ) * CASE
+          ) * CASE 
                 WHEN EXISTS (
-                    SELECT * FROM "Favorite" f
+                    SELECT * FROM "Favorite" f 
                     WHERE f.id = $1 AND f.mt_id = mt.mt_id
-                )
+                ) 
               THEN 1.3 ELSE 1
             END AS score
         FROM "MassageTechnique" mt
@@ -67,38 +65,23 @@ export const handleSingleRecommend = async (
       `,
       [userID]
     );
-
-    if (rowCount < 1) {
-      return reply.status(404).send({
-        error: "Have no any Single Massage Technique Recommendations",
-      });
-    }
-
-    const hashData = await redis.get(hashKey);
     const newHash = crypto
       .createHash("sha256")
-      .update(JSON.stringify(rows)) // new data from query
+      .update(JSON.stringify(rows))
       .digest("hex");
 
-    // New data is the same as the Old data
-    if (hashData === newHash) {
-      console.log("Cache HIT !!! Not Update Cache");
-
-      return reply.status(200).send({
-        message:
-          "Give New Recommend Single Massage Technique Successfully (Not Update Cache)",
-        data: rows,
-      });
+    if (cachedHash === newHash) {
+      console.log("Cache hit: Data unchanged");
+      const cachedData = await redis.get(cacheKey);
+      if (cachedData) return JSON.parse(cachedData);
     }
 
-    // New data is different from the Old data
-    console.log("Cache MISS !!! Update Cache");
+    console.log("Cache miss: Data changed, updating cache");
     await redis.set(cacheKey, JSON.stringify(rows), "EX", 60); // 60 seconds
     await redis.set(hashKey, newHash, "EX", 60); // 60 seconds
 
     return reply.status(200).send({
-      message:
-        "Give New Recommend Single Massage Technique Successfully (Update Cache)",
+      message: "Give New Recommend Single Massage Technique Successfully",
       data: rows,
     });
   } catch (err) {

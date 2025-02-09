@@ -8,7 +8,6 @@ import {
   ReviewSetMassageBodyRequest,
   RecordSingleMassageBodyRequest,
   RecordSetMassageBodyRequest,
-  RecommendMassageBodyRequest,
 } from "../type/handler/massage";
 import { handleGetSingleDetail } from "../handler/massage/MassageInfo/handleGetSingleDetail";
 import { handleGetSetDetail } from "../handler/massage/MassageInfo/handleGetSetDetail";
@@ -20,12 +19,8 @@ import { handleReviewSingleMassage } from "../handler/massage/Reviews/handleRevi
 import { handleReviewSetMassage } from "../handler/massage/Reviews/handleReviewSetMassage";
 import { handleRecordSingleMassage } from "../handler/massage/Records/handleRecordSingleMassage";
 import { handleRecordSetMassage } from "../handler/massage/Records/handleRecordSetMassage";
-import { handleSingleRecommend } from "../handler/massage/Recommend/handleSingleRecommend";
-import { handleSetRecommend } from "../handler/massage/Recommend/handleSetRecommend";
 
 const massageRouter = async (app: FastifyInstance) => {
-  // Massage Info ////////////////////////////////////////////////////////////////////////////////
-
   // Fetch List of Single Massage Techniques
   app.get("/single-list", async (request: any, reply: FastifyReply) => {
     const result = await handleGetSingleLists(reply, app);
@@ -55,9 +50,6 @@ const massageRouter = async (app: FastifyInstance) => {
       reply.send(result);
     }
   );
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // Reviews /////////////////////////////////////////////////////////////////////////////////////
 
   // Get List of Single Massage Technique's Reviews
   app.post(
@@ -97,9 +89,6 @@ const massageRouter = async (app: FastifyInstance) => {
       reply.send(result);
     }
   );
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // Records /////////////////////////////////////////////////////////////////////////////////////
 
   // Record Single Massage Technique to History after ending the learning session
   app.post(
@@ -118,28 +107,6 @@ const massageRouter = async (app: FastifyInstance) => {
       reply.send(result);
     }
   );
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // Recommend ///////////////////////////////////////////////////////////////////////////////////
-
-  // Recommend Single Massage Technique
-  app.post(
-    "/single-recommend",
-    async (request: RecommendMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleSingleRecommend(request, reply, app);
-      reply.send(result);
-    }
-  );
-
-  // Recommend Set Massage Technique
-  app.post(
-    "/set-recommend",
-    async (request: RecommendMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleSetRecommend(request, reply, app);
-      reply.send(result);
-    }
-  );
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 };
 
 export default massageRouter;

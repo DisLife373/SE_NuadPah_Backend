@@ -10,6 +10,8 @@ const config = {
   jwt: process.env.JWT_SECRET || "nuad_pah_comsci",
   mail_user: process.env.EMAIL_USER,
   mail_pw: process.env.EMAIL_PASSWORD,
+  redisHost: process.env.REDIS_HOST || "redis",
+  redisPort: parseInt(process.env.REDIS_PORT || "6379", 10),
 };
 
 export default config;
