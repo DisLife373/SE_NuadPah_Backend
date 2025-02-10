@@ -28,9 +28,9 @@ services:
     container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_USER: ${postgres}
-      POSTGRES_PASSWORD: ${MuNew2310}
-      POSTGRES_DB: ${nuadpah_db}
+      POSTGRES_USER: ${USER}
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
