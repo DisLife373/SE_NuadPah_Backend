@@ -20,7 +20,9 @@ export const handleSendReport = async (
       [email]
     );
 
-    if (userQuery.rowCount < 1) {
+    client.release();
+
+    if (userQuery.rowCount == null || userQuery.rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "There is no this User in system" });
@@ -36,6 +38,8 @@ export const handleSendReport = async (
       `,
       [id, title, detail, timestamp]
     );
+
+    client.release();
 
     return reply
       .status(201)

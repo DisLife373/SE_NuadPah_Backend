@@ -11,20 +11,24 @@ export const handleGetSingleLists = async (
         SELECT * FROM public."MassageTechnique";
       `
     );
+    
+    client.release();
 
-    if (rowCount < 1) {
+    if (rowCount == null || rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "Any Single Massage Technique is not exist !" });
     }
+
 
     return reply.status(200).send({
       message: "Fetch Single Massage Techniques Successfully",
       data: rows,
     });
   } catch (err) {
-    return reply
-      .status(500)
-      .send({ error: err, message: "Can't Find Single Massage Technique" });
+    return reply.status(500).send({
+      error: err,
+      message: "Can't Find Single Massage Technique",
+    });
   }
 };

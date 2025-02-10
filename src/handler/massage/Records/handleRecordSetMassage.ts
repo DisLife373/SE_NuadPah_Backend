@@ -19,7 +19,9 @@ export const handleRecordSetMassage = async (
       [email]
     );
 
-    if (userQuery.rowCount < 1) {
+    client.release();
+
+    if (userQuery.rowCount == null || userQuery.rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "There is no this User in system" });
@@ -35,7 +37,9 @@ export const handleRecordSetMassage = async (
       [ms_id]
     );
 
-    if (massageQuery.rowCount < 1) {
+    client.release();
+
+    if (massageQuery.rowCount == null || massageQuery.rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "There is no this User in system" });
@@ -60,6 +64,8 @@ export const handleRecordSetMassage = async (
       `,
       [ms_id, id, learning_time, learning_round, status, datetime]
     );
+
+    client.release();
 
     return reply.status(201).send({
       message: "Record Your Single Massage's Learning Successfully",

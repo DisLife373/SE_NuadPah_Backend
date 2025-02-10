@@ -18,6 +18,8 @@ export const handleVerifyOTP = async (
       [email]
     );
 
+    client.release();
+
     if (rowCount != 1) {
       return reply
         .status(404)

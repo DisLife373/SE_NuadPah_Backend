@@ -22,6 +22,8 @@ export const handleSignUp = async (
       [email]
     );
 
+    client.release();
+
     if (userQuery.rows.length > 0) {
       return reply.status(403).send({ error: "Already has this user" });
     }
@@ -35,6 +37,8 @@ export const handleSignUp = async (
       `,
       [email, firstname, lastname, hashedPW]
     );
+
+    client.release();
 
     const token = jwt.sign({ userEmail: rows[0].email }, config.jwt, {
       expiresIn: "1h",

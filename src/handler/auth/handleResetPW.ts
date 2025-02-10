@@ -26,6 +26,8 @@ export const handleResetPW = async (
       [hashedPW, email]
     );
 
+    client.release();
+
     return reply.status(200).send({ message: "Password is updated" });
   } catch (e) {
     return reply.status(500).send({ message: "Internal Server Error" });

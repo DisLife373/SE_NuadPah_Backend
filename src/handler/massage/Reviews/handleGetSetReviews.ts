@@ -17,7 +17,7 @@ export const handleGetSetReviews = async (
       [ms_id]
     );
 
-    if (rowCount < 1) {
+    if (rowCount == null || rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "No Any Set Massage Technique's Reviews" });

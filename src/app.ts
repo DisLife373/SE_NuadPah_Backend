@@ -1,10 +1,9 @@
 import fastify, { FastifyServerOptions } from "fastify";
-import fastifyPostgres, { PostgresPluginOptions } from "@fastify/postgres";
 import fastifyCors from "@fastify/cors";
-import config from "./config/config";
 import authRouter from "./router/auth";
 import massageRouter from "./router/massage";
 import adminRouter from "./router/admin";
+import pool from "./util/postgres";
 
 const buildApp = (options: FastifyServerOptions) => {
   const app = fastify(options);
@@ -15,10 +14,7 @@ const buildApp = (options: FastifyServerOptions) => {
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
   });
 
-  const postgresOptions: PostgresPluginOptions = {
-    connectionString: config.db,
-  };
-  app.register(fastifyPostgres, postgresOptions);
+  app.decorate("pg", pool);
 
   app.register(authRouter, { prefix: "/auth" });
   app.register(massageRouter, { prefix: "/massage" });

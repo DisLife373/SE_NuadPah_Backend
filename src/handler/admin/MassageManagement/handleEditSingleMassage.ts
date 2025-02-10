@@ -21,6 +21,8 @@ export const handleEditSingleMassage = async (
       [mt_name, mt_type, mt_round, mt_time, mt_detail, mt_image_name, mt_id]
     );
 
+    client.release();
+
     return reply
       .status(200)
       .send({ message: "Edit Single Massage Successfully", data: rows[0] });

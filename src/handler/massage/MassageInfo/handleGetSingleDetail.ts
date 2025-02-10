@@ -17,12 +17,13 @@ export const handleGetSingleDetail = async (
       [mt_id]
     );
 
-    if (rowCount < 1) {
+    client.release();
+
+    if (rowCount == null || rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "This Single Massage Technique is not exist !" });
     }
-
     return reply.status(200).send({
       message: "Fetch Single Massage Technique Successfully",
       data: rows[0],

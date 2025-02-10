@@ -21,7 +21,9 @@ export const handleSetRecommend = async (
       [email]
     );
 
-    if (userQuery.rowCount < 1) {
+    client.release();
+
+    if (userQuery.rowCount == null || userQuery.rowCount < 1) {
       return reply.status(404).send({ error: "This User is not exist !" });
     }
 
@@ -60,7 +62,7 @@ export const handleSetRecommend = async (
                 )
               THEN 1.3 ELSE 1
             END AS score
-        FROM "MassageTechnique" ms
+        FROM "MassageSet" ms
         LEFT JOIN user_set_rating ur ON ms.ms_id = ur.ms_id AND ur.id = $1
         LEFT JOIN avg_set_rating ar ON ms.ms_id = ar.ms_id
         ORDER BY score DESC;
@@ -68,7 +70,9 @@ export const handleSetRecommend = async (
       [userID]
     );
 
-    if (rowCount < 1) {
+    client.release();
+
+    if (rowCount == null || rowCount < 1) {
       return reply.status(404).send({
         error: "Have no any Single Massage Technique Recommendations",
       });

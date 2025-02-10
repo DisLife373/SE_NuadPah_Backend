@@ -12,7 +12,9 @@ export const handleGetSetLists = async (
       `
     );
 
-    if (rowCount < 1) {
+    client.release();
+
+    if (rowCount == null || rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "Any Set Massage Technique is not exist !" });

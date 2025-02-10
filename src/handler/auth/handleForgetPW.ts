@@ -19,6 +19,8 @@ export const handleForgetPW = async (
       [emailForget]
     );
 
+    client.release();
+
     if (userQuery.rows.length != 1) {
       return reply.status(404).send({
         message: "Email is not found",
@@ -34,6 +36,8 @@ export const handleForgetPW = async (
         `,
       [emailForget, otp, expiresAt]
     );
+
+    client.release();
 
     await sendEmail(emailForget, `Your OTP is ${otp}.`);
 

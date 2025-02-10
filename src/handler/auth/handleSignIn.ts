@@ -22,6 +22,8 @@ export const handleSignIn = async (
       [email]
     );
 
+    client.release();
+
     if (rows.length != 1) {
       return reply.status(400).send({ error: "Invalid email or password" });
     }

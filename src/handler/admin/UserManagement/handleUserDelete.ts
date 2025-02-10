@@ -16,6 +16,9 @@ export const handleUserDelete = async (
       `,
       [id]
     );
+
+    client.release();
+    
     return reply.status(200).send({
       message: "Delete this User Account Successfully",
       data: rows[0],
