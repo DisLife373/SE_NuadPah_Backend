@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install && npm install cross-spawn@^7.0.5
 
 # Copy the rest of the application
 COPY . .
