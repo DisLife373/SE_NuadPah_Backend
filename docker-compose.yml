@@ -3,13 +3,12 @@ version: "3.1"
 services:
   fastify-app:
     build: .
-    container_name: fastify_server
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
+    container_name: fastify_app
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - USER=${USER}
+      - PASSWORD=${PASSWORD}
+      - DB_NAME=${DB_NAME}
       - HOST=${HOST}
       - PORT=${PORT}
       - JWT_SECRET=${JWT_SECRET}
@@ -17,6 +16,8 @@ services:
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
+    ports:
+      - "3000:3000"
     depends_on:
       - postgres
       - redis
@@ -33,15 +34,12 @@ services:
       POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
-    volumes:
-      - pg_data:/var/lib/postgresql/data
     networks:
       - app_network
 
   redis:
-    image: redis:7
-    container_name: redis_server
-    restart: always
+    image: redis:latest
+    container_name: redis
     ports:
       - "6379:6379"
     networks:
@@ -49,6 +47,4 @@ services:
 
 networks:
   app_network:
-
-volumes:
-  pg_data:
+    driver: bridge
