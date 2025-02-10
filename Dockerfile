@@ -1,26 +1,23 @@
-# Use an official Node.js image
 FROM node:20.18.2-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+RUN apk update
+
+RUN apk add openssl=3.3.2-r5
+
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install && npm install cross-spawn@^7.0.5
+RUN npm install -g npm@latest 
 
-# Copy the rest of the application
+RUN npm install cross-spawn@^7.0.5 --save
+
 COPY . .
 
-# Ensure TypeScript is installed
 RUN npm install -g typescript
 
-# Build the TypeScript code
 RUN npm run build
 
-# Expose Fastify's port
 EXPOSE 3000
 
-# Start the application
 CMD ["npm", "run", "start"]
