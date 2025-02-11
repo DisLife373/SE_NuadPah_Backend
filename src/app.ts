@@ -1,5 +1,6 @@
 import fastify, { FastifyServerOptions } from "fastify";
 import fastifyCors from "@fastify/cors";
+import multipart from "@fastify/multipart";
 import authRouter from "./router/auth";
 import massageRouter from "./router/massage";
 import adminRouter from "./router/admin";
@@ -11,6 +12,8 @@ const buildApp = (options: FastifyServerOptions) => {
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
   });
+
+  app.register(multipart);
 
   app.register(authRouter, { prefix: "/auth" });
   app.register(massageRouter, { prefix: "/massage" });
