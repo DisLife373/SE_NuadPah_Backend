@@ -21,8 +21,6 @@ export const handleAddSetMassage = async (
       [mt_ids, ms_name, ms_type, ms_time, ms_detail, ms_image_names]
     );
 
-    client.release();
-
     return reply
       .status(201)
       .send({ message: "Add Set Massage Successfully", data: rows[0] });

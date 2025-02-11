@@ -12,13 +12,10 @@ export const handleVerifyOTP = async (
     const { rows, rowCount } = await client.query(
       `
       SELECT otp, expired_at FROM public."OTP"
-      WHERE email = $1
       ORDER BY expired_at DESC LIMIT 1;
     `,
       [email]
     );
-
-    client.release();
 
     if (rowCount != 1) {
       return reply

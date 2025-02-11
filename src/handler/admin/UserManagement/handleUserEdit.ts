@@ -20,8 +20,6 @@ export const handleUserEdit = async (
       [email, firstname, lastname, password, image_name, id]
     );
 
-    client.release();
-
     return reply
       .status(200)
       .send({ message: "Edit User Information Successfully", data: rows[0] });

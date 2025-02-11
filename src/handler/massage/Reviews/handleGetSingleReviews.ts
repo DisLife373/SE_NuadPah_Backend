@@ -17,7 +17,7 @@ export const handleGetSingleReviews = async (
       [mt_id]
     );
 
-    if (rowCount == null || rowCount < 1) {
+    if (rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "No Any Single Massage Technique's Reviews" });

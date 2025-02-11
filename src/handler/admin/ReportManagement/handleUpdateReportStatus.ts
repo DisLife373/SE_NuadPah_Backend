@@ -27,8 +27,6 @@ export const handleUpdateReportStatus = async (
       [status[status_index], rep_id]
     );
 
-    client.release();
-
     return reply
       .status(200)
       .send({ message: "Update Report Status Successfully", data: rows[0] });

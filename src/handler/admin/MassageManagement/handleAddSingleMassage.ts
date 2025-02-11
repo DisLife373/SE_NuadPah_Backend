@@ -21,8 +21,6 @@ export const handleAddSingleMassage = async (
       [mt_name, mt_type, mt_round, mt_time, mt_detail, mt_image_name]
     );
 
-    client.release();
-
     return reply
       .status(201)
       .send({ message: "Add Single Massage Successfully", data: rows[0] });

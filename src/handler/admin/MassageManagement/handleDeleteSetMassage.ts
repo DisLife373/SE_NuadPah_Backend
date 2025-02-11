@@ -16,9 +16,6 @@ export const handleDeleteSetMassage = async (
       `,
       [ms_id]
     );
-
-    client.release();
-    
     return reply
       .status(200)
       .send({ message: "Delete Set Massage Successfully", data: rows[0] });

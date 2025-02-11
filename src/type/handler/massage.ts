@@ -64,7 +64,7 @@ export type RecordSetMassageBodyRequest = FastifyRequest<{
   };
 }>;
 
-export type RecommendMassageBodyRequest = FastifyRequest<{
+export type RecommendSingleMassageBodyRequest = FastifyRequest<{
   Body: {
     email: string;
   };

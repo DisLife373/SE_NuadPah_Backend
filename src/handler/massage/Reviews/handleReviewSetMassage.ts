@@ -17,7 +17,7 @@ export const handleReviewSetMassage = async (
       [email]
     );
 
-    if (userQuery.rowCount == null || userQuery.rowCount < 1) {
+    if (userQuery.rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "There is no this User in system" });

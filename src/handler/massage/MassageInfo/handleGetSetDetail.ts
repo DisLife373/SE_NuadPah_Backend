@@ -17,9 +17,7 @@ export const handleGetSetDetail = async (
       [ms_id]
     );
 
-    client.release();
-
-    if (massageSetQuery.rowCount == null || massageSetQuery.rowCount < 1) {
+    if (massageSetQuery.rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "This Single Massage Technique is not exist !" });
@@ -38,8 +36,6 @@ export const handleGetSetDetail = async (
       );
       massageTechniques.push(massageQuery.rows[0]);
     }
-
-    client.release();
 
     massageSetDetail.massageTechniqueDetails = massageTechniques;
 

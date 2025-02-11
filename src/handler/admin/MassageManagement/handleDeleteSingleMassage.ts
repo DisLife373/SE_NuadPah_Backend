@@ -16,9 +16,6 @@ export const handleDeleteSingleMassage = async (
       `,
       [mt_id]
     );
-
-    client.release();
-    
     return reply
       .status(200)
       .send({ message: "Delete Single Massage Successfully", data: rows[0] });
