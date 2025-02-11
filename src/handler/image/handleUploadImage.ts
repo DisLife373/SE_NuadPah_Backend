@@ -4,7 +4,9 @@ import { uploadFileToB2 } from "../../util/imageHandling/uploadFileToB2";
 
 export const handleUploadImage = async (request: any, reply: FastifyReply) => {
   const data = await request.file();
-  if (!data) return reply.status(400).send("No file uploaded");
+  if (!data) {
+    return reply.status(400).send({ message: "No file uploaded" });
+  }
 
   const buffer = await data.toBuffer();
   const fileData = {
@@ -14,11 +16,14 @@ export const handleUploadImage = async (request: any, reply: FastifyReply) => {
   };
 
   try {
+    // อัปโหลดไฟล์ไปยัง Backblaze B2
     const url = await uploadFileToB2(fileData, config.bb_bucket_name);
     return reply
       .status(201)
       .send({ message: "File upload Success!", data: url });
   } catch (err) {
-    return reply.status(500).send({ error: err, message: "Upload failed" });
+    return reply
+      .status(500)
+      .send({ error: err || err, message: "Upload failed (Handler)" });
   }
 };

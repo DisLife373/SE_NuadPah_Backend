@@ -1,25 +1,23 @@
-import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "../backblaze_b2";
+import { fetch } from "undici";
+import config from "../../config/config";
+import { authorizeB2 } from "./authorizeB2";
 
 export const downloadFileFromB2 = async (
   fileName: string,
   bucketName: string
-): Promise<{ body: any; contentType: string | undefined }> => {
-  try {
-    const command = new GetObjectCommand({
-      Bucket: bucketName,
-      Key: fileName,
-    });
+) => {
+  const authData: any = await authorizeB2();
 
-    const { Body, ContentType } = await s3Client.send(command);
+  const fileUrl = `${authData.downloadUrl}/file/${bucketName}/${fileName}`;
+  const fileResponse = await fetch(fileUrl, {
+    method: "GET",
+    headers: { Authorization: authData.authorizationToken },
+  });
 
-    if (!Body) {
-      throw new Error("File not found");
-    }
+  if (!fileResponse.ok) throw new Error("File download failed");
 
-    return { body: Body, contentType: ContentType };
-  } catch (error) {
-    console.error("B2 Download Error:", error);
-    throw new Error("File download failed");
-  }
+  return {
+    body: fileResponse.body,
+    contentType: fileResponse.headers.get("content-type"),
+  };
 };

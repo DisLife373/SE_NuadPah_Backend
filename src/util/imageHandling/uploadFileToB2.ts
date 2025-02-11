@@ -1,24 +1,31 @@
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "../backblaze_b2";
+import { fetch } from "undici";
+import { getUploadURL } from "./getUploadURL";
 
 export const uploadFileToB2 = async (
   file: { filename: string; mimetype: string; data: Buffer },
   bucketName: string
-): Promise<string> => {
-  try {
-    const command = new PutObjectCommand({
-      Bucket: bucketName,
-      Key: file.filename,
-      Body: file.data,
-      ContentType: file.mimetype,
-    });
+) => {
+  const uploadUrlData: any = await getUploadURL();
 
-    await s3Client.send(command);
+  console.log("Get Upload URL!");
+  console.log("------------------------------------------------------------");
 
-    // Generate the file URL
-    return `${process.env.B2_ENDPOINT}/${bucketName}/${file.filename}`;
-  } catch (error) {
-    console.error("B2 Upload Error:", error);
-    throw new Error("File upload failed");
-  }
+  const uploadResponse = await fetch(uploadUrlData.uploadUrl, {
+    method: "POST",
+    headers: {
+      Authorization: uploadUrlData.authorizationToken,
+      "X-Bz-File-Name": encodeURIComponent(file.filename),
+      "Content-Type": file.mimetype,
+      "X-Bz-Content-Sha1": "do_not_verify",
+    },
+    body: file.data,
+  });
+
+  console.log("Get Upload Response!");
+  console.log("------------------------------------------------------------");
+
+  if (!uploadResponse.ok) throw new Error("File upload failed");
+  const uploadResult = await uploadResponse.json();
+
+  return `${uploadUrlData.downloadUrl}/file/${bucketName}/${file.filename}`;
 };
