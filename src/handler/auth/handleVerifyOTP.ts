@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { VerifyOTPBodyRequest } from "../../type/handler/auth";
+import pool from "../../util/postgres";
 
 export const handleVerifyOTP = async (
   request: VerifyOTPBodyRequest,
@@ -8,14 +9,17 @@ export const handleVerifyOTP = async (
 ) => {
   try {
     const { email, otp } = request.body;
-    const client = await app.pg.connect();
+    const client = await pool.connect();
     const { rows, rowCount } = await client.query(
       `
       SELECT otp, expired_at FROM public."OTP"
+      WHERE email = $1
       ORDER BY expired_at DESC LIMIT 1;
     `,
       [email]
     );
+
+    client.release();
 
     if (rowCount != 1) {
       return reply

@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { UpdateReportStatusBodyRequest } from "../../../type/handler/admin";
+import pool from "../../../util/postgres";
 
 export const handleUpdateReportStatus = async (
   request: UpdateReportStatusBodyRequest,
@@ -17,7 +18,7 @@ export const handleUpdateReportStatus = async (
 
     const status = ["Pending", "Processing", "Completed", "Cancelled"];
 
-    const client = await app.pg.connect();
+    const client = await pool.connect();
     const { rows } = await client.query(
       `
         UPDATE public."Report"
@@ -26,6 +27,8 @@ export const handleUpdateReportStatus = async (
       `,
       [status[status_index], rep_id]
     );
+
+    client.release();
 
     return reply
       .status(200)

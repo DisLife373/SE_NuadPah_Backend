@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { EditUserBodyRequest } from "../../../type/handler/admin";
+import pool from "../../../util/postgres";
 
 export const handleUserEdit = async (
   request: EditUserBodyRequest,
@@ -10,7 +11,7 @@ export const handleUserEdit = async (
     const { id } = request.params;
     const { email, firstname, lastname, password, image_name } = request.body;
 
-    const client = await app.pg.connect();
+    const client = await pool.connect();
     const { rows } = await client.query(
       `
         UPDATE public."User"
@@ -19,6 +20,8 @@ export const handleUserEdit = async (
       `,
       [email, firstname, lastname, password, image_name, id]
     );
+
+    client.release();
 
     return reply
       .status(200)

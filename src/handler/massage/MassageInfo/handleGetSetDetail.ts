@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { SetMassageDetailBodyRequest } from "../../../type/handler/massage";
+import pool from "../../../util/postgres";
 
 export const handleGetSetDetail = async (
   request: SetMassageDetailBodyRequest,
@@ -8,7 +9,7 @@ export const handleGetSetDetail = async (
 ) => {
   try {
     const { ms_id } = request.body;
-    const client = await app.pg.connect();
+    const client = await pool.connect();
     const massageSetQuery = await client.query(
       `
         SELECT * FROM public."MassageSet"
@@ -17,10 +18,10 @@ export const handleGetSetDetail = async (
       [ms_id]
     );
 
-    if (massageSetQuery.rowCount < 1) {
+    if (massageSetQuery.rowCount == null || massageSetQuery.rowCount < 1) {
       return reply
         .status(404)
-        .send({ error: "This Single Massage Technique is not exist !" });
+        .send({ error: "This Set Massage Technique is not exist !" });
     }
 
     const massageSetDetail = massageSetQuery.rows[0];
@@ -37,6 +38,8 @@ export const handleGetSetDetail = async (
       massageTechniques.push(massageQuery.rows[0]);
     }
 
+    client.release();
+
     massageSetDetail.massageTechniqueDetails = massageTechniques;
 
     return reply.status(200).send({
@@ -46,6 +49,6 @@ export const handleGetSetDetail = async (
   } catch (err) {
     return reply
       .status(500)
-      .send({ error: err, message: "Can't Find Single Massage Technique" });
+      .send({ error: err, message: "Can't Find Set Massage Technique" });
   }
 };

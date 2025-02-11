@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { GetSingleMassageReviewsBodyRequest } from "../../../type/handler/massage";
+import pool from "../../../util/postgres";
 
 export const handleGetSingleReviews = async (
   request: GetSingleMassageReviewsBodyRequest,
@@ -8,7 +9,7 @@ export const handleGetSingleReviews = async (
 ) => {
   try {
     const { mt_id } = request.body;
-    const client = await app.pg.connect();
+    const client = await pool.connect();
     const { rows, rowCount } = await client.query(
       `
         SELECT * FROM public."ReviewSingleMassage"
@@ -17,7 +18,9 @@ export const handleGetSingleReviews = async (
       [mt_id]
     );
 
-    if (rowCount < 1) {
+    client.release();
+
+    if (rowCount == null || rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "No Any Single Massage Technique's Reviews" });

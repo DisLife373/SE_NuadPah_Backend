@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { SendReportStatusBodyRequest } from "../../type/handler/support";
+import pool from "../../util/postgres";
 
 export const handleSendReport = async (
   request: SendReportStatusBodyRequest,
@@ -10,7 +11,7 @@ export const handleSendReport = async (
     
     const { email, title, detail, timestamp } = request.body;
 
-    const client = await app.pg.connect();
+    const client = await pool.connect();
 
     const userQuery = await client.query(
       `
@@ -20,7 +21,9 @@ export const handleSendReport = async (
       [email]
     );
 
-    if (userQuery.rowCount < 1) {
+    client.release();
+
+    if (userQuery.rowCount == null || userQuery.rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "There is no this User in system" });
@@ -36,6 +39,8 @@ export const handleSendReport = async (
       `,
       [id, title, detail, timestamp]
     );
+
+    client.release();
 
     return reply
       .status(201)

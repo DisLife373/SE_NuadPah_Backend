@@ -20,7 +20,7 @@ const authRouter = async (app: FastifyInstance) => {
   app.post(
     "/signin",
     async (request: AuthSignInBodyRequest, reply: FastifyReply) => {
-      const result = await handleSignIn(request, reply, app);
+      const result = await handleSignIn(request, reply);
       reply.send(result);
     }
   );
@@ -29,7 +29,7 @@ const authRouter = async (app: FastifyInstance) => {
   app.post(
     "/signup",
     async (request: AuthSignUpBodyRequest, reply: FastifyReply) => {
-      const result = await handleSignUp(request, reply, app);
+      const result = await handleSignUp(request, reply);
       reply.send(result);
     }
   );
@@ -48,7 +48,7 @@ const authRouter = async (app: FastifyInstance) => {
   app.post(
     "/forgetpw",
     async (request: AuthForgetPWBodyRequest, reply: FastifyReply) => {
-      const result = await handleForgetPW(request, reply, app);
+      const result = await handleForgetPW(request, reply);
       reply.send(result);
     }
   );

@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { getStatus } from "../../../util/learning_status";
 import { RecordSingleMassageBodyRequest } from "../../../type/handler/massage";
+import pool from "../../../util/postgres";
 
 export const handleRecordSingleMassage = async (
   request: RecordSingleMassageBodyRequest,
@@ -10,7 +11,7 @@ export const handleRecordSingleMassage = async (
   try {
     const { email, mt_id, learning_round, learning_time, datetime } =
       request.body;
-    const client = await app.pg.connect();
+    const client = await pool.connect();
     const userQuery = await client.query(
       `
         SELECT id FROM public."User"
@@ -19,7 +20,9 @@ export const handleRecordSingleMassage = async (
       [email]
     );
 
-    if (userQuery.rowCount < 1) {
+    client.release();
+
+    if (userQuery.rowCount == null || userQuery.rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "There is no this User in system" });
@@ -35,7 +38,9 @@ export const handleRecordSingleMassage = async (
       [mt_id]
     );
 
-    if (massageQuery.rowCount < 1) {
+    client.release();
+
+    if (massageQuery.rowCount == null || massageQuery.rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "There is no this User in system" });
@@ -60,6 +65,8 @@ export const handleRecordSingleMassage = async (
       `,
       [mt_id, id, learning_time, learning_round, status, datetime]
     );
+
+    client.release();
 
     return reply.status(201).send({
       message: "Record Your Single Massage's Learning Successfully",

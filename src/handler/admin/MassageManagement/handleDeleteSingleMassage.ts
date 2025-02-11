@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { DeleteSingleMassageParamsRequest } from "../../../type/handler/admin";
+import pool from "../../../util/postgres";
 
 export const handleDeleteSingleMassage = async (
   request: DeleteSingleMassageParamsRequest,
@@ -8,7 +9,7 @@ export const handleDeleteSingleMassage = async (
 ) => {
   try {
     const { mt_id } = request.params;
-    const client = await app.pg.connect();
+    const client = await pool.connect();
     const { rows } = await client.query(
       `
         DELETE FROM public."MassageTechnique"
@@ -16,6 +17,9 @@ export const handleDeleteSingleMassage = async (
       `,
       [mt_id]
     );
+
+    client.release();
+    
     return reply
       .status(200)
       .send({ message: "Delete Single Massage Successfully", data: rows[0] });

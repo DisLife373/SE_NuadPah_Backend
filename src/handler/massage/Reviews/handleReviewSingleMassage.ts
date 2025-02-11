@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { ReviewSingleMassageBodyRequest } from "../../../type/handler/massage";
+import pool from "../../../util/postgres";
 
 export const handleReviewSingleMassage = async (
   request: ReviewSingleMassageBodyRequest,
@@ -8,7 +9,7 @@ export const handleReviewSingleMassage = async (
 ) => {
   try {
     const { email, mt_id, rating, detail, datetime } = request.body;
-    const client = await app.pg.connect();
+    const client = await pool.connect();
     const userQuery = await client.query(
       `
         SELECT id FROM public."User"
@@ -17,7 +18,7 @@ export const handleReviewSingleMassage = async (
       [email]
     );
 
-    if (userQuery.rowCount < 1) {
+    if (userQuery.rowCount == null || userQuery.rowCount < 1) {
       return reply
         .status(404)
         .send({ error: "There is no this User in system" });
@@ -34,6 +35,8 @@ export const handleReviewSingleMassage = async (
       `,
       [mt_id, id, rating, detail, datetime]
     );
+
+    client.release();
 
     return reply.status(201).send({
       message: "Add Your Single Massage's Review Successfully",

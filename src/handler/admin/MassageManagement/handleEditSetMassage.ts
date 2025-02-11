@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply } from "fastify";
 import { EditSetMassageBodyRequest } from "../../../type/handler/admin";
+import pool from "../../../util/postgres";
 
 export const handleEditSetMassage = async (
   request: EditSetMassageBodyRequest,
@@ -11,7 +12,7 @@ export const handleEditSetMassage = async (
     const { mt_ids, ms_name, ms_type, ms_time, ms_detail, ms_image_names } =
       request.body;
 
-    const client = await app.pg.connect();
+    const client = await pool.connect();
     const { rows } = await client.query(
       `
         UPDATE public."MassageSet"
@@ -20,6 +21,8 @@ export const handleEditSetMassage = async (
       `,
       [mt_ids, ms_name, ms_type, ms_time, ms_detail, ms_image_names, ms_id]
     );
+
+    client.release();
 
     return reply
       .status(200)

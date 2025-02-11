@@ -1,17 +1,17 @@
 import fastify, { FastifyServerOptions } from "fastify";
-import fastifyPostgres, { PostgresPluginOptions } from "@fastify/postgres";
-import config from "./config/config";
+import fastifyCors from "@fastify/cors";
 import authRouter from "./router/auth";
 import massageRouter from "./router/massage";
 import adminRouter from "./router/admin";
+import pool from "./util/postgres";
 
 const buildApp = (options: FastifyServerOptions) => {
   const app = fastify(options);
 
-  const postgresOptions: PostgresPluginOptions = {
-    connectionString: config.db,
-  };
-  app.register(fastifyPostgres, postgresOptions);
+  app.register(fastifyCors, {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  });
 
   app.register(authRouter, { prefix: "/auth" });
   app.register(massageRouter, { prefix: "/massage" });
