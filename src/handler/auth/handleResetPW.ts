@@ -6,7 +6,6 @@ import pool from "../../util/postgres";
 export const handleResetPW = async (
   request: AuthResetPWBodyRequest,
   reply: FastifyReply,
-  app: FastifyInstance
 ) => {
   try {
     const { email, newpw, confirmpw } = request.body;

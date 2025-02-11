@@ -5,7 +5,6 @@ import pool from "../../../util/postgres";
 export const handleEditSingleMassage = async (
   request: EditSingleMassageBodyRequest,
   reply: FastifyReply,
-  app: FastifyInstance
 ) => {
   try {
     const { mt_id } = request.params;

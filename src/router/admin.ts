@@ -25,7 +25,7 @@ const adminRouter = async (app: FastifyInstance) => {
   app.post(
     "/add-single-massage",
     async (request: AddSingleMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleAddSingleMassage(request, reply, app);
+      const result = await handleAddSingleMassage(request, reply);
       reply.send(result);
     }
   );
@@ -34,7 +34,7 @@ const adminRouter = async (app: FastifyInstance) => {
   app.put(
     "/edit-single-massage/:mt_id",
     async (request: EditSingleMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleEditSingleMassage(request, reply, app);
+      const result = await handleEditSingleMassage(request, reply);
       reply.send(result);
     }
   );
@@ -43,7 +43,7 @@ const adminRouter = async (app: FastifyInstance) => {
   app.delete(
     "/delete-single-massage/:mt_id",
     async (request: EditSingleMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleDeleteSingleMassage(request, reply, app);
+      const result = await handleDeleteSingleMassage(request, reply);
       reply.send(result);
     }
   );
@@ -52,7 +52,7 @@ const adminRouter = async (app: FastifyInstance) => {
   app.post(
     "/add-set-massage",
     async (request: AddSetMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleAddSetMassage(request, reply, app);
+      const result = await handleAddSetMassage(request, reply);
       reply.send(result);
     }
   );
@@ -61,7 +61,7 @@ const adminRouter = async (app: FastifyInstance) => {
   app.put(
     "/edit-set-massage/:ms_id",
     async (request: EditSetMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleEditSetMassage(request, reply, app);
+      const result = await handleEditSetMassage(request, reply);
       reply.send(result);
     }
   );
@@ -70,7 +70,7 @@ const adminRouter = async (app: FastifyInstance) => {
   app.delete(
     "/delete-set-massage/:ms_id",
     async (request: EditSetMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleDeleteSetMassage(request, reply, app);
+      const result = await handleDeleteSetMassage(request, reply);
       reply.send(result);
     }
   );
@@ -82,7 +82,7 @@ const adminRouter = async (app: FastifyInstance) => {
   app.put(
     "/edit-user/:ms_id",
     async (request: EditUserBodyRequest, reply: FastifyReply) => {
-      const result = await handleUserEdit(request, reply, app);
+      const result = await handleUserEdit(request, reply);
       reply.send(result);
     }
   );
@@ -91,7 +91,7 @@ const adminRouter = async (app: FastifyInstance) => {
   app.delete(
     "/delete-user/:ms_id",
     async (request: DeleteUserParamsRequest, reply: FastifyReply) => {
-      const result = await handleUserDelete(request, reply, app);
+      const result = await handleUserDelete(request, reply);
       reply.send(result);
     }
   );
@@ -101,7 +101,7 @@ const adminRouter = async (app: FastifyInstance) => {
   app.put(
     "/update-report-status/:rep_id",
     async (request: UpdateReportStatusBodyRequest, reply: FastifyReply) => {
-      const result = await handleUpdateReportStatus(request, reply, app);
+      const result = await handleUpdateReportStatus(request, reply);
       reply.send(result);
     }
   );

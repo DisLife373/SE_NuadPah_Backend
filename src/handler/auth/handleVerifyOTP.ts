@@ -5,7 +5,6 @@ import pool from "../../util/postgres";
 export const handleVerifyOTP = async (
   request: VerifyOTPBodyRequest,
   reply: FastifyReply,
-  app: FastifyInstance
 ) => {
   try {
     const { email, otp } = request.body;

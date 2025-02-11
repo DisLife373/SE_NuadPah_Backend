@@ -5,7 +5,6 @@ import pool from "../../../util/postgres";
 export const handleDeleteSetMassage = async (
   request: DeleteSetMassageParamsRequest,
   reply: FastifyReply,
-  app: FastifyInstance
 ) => {
   try {
     const { ms_id } = request.params;

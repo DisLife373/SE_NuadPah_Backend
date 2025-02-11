@@ -7,7 +7,6 @@ import pool from "../../../util/postgres";
 export const handleSetRecommend = async (
   request: RecommendMassageBodyRequest,
   reply: FastifyReply,
-  app: FastifyInstance
 ) => {
   try {
     // Get email from request body to query user id

@@ -5,7 +5,6 @@ import pool from "../../../util/postgres";
 export const handleUpdateReportStatus = async (
   request: UpdateReportStatusBodyRequest,
   reply: FastifyReply,
-  app: FastifyInstance
 ) => {
   try {
     const { rep_id } = request.params;

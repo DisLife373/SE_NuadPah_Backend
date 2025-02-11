@@ -3,7 +3,6 @@ import pool from "../../../util/postgres";
 
 export const handleGetSingleLists = async (
   reply: FastifyReply,
-  app: FastifyInstance
 ) => {
   try {
     const client = await pool.connect();

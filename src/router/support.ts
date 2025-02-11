@@ -7,7 +7,7 @@ const supportRouter = async (app: FastifyInstance) => {
   app.post(
     "/send-report",
     async (request: SendReportStatusBodyRequest, reply: FastifyReply) => {
-      const result = await handleSendReport(request, reply, app);
+      const result = await handleSendReport(request, reply);
       reply.send(result);
     }
   );

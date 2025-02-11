@@ -3,7 +3,6 @@ import fastifyCors from "@fastify/cors";
 import authRouter from "./router/auth";
 import massageRouter from "./router/massage";
 import adminRouter from "./router/admin";
-import pool from "./util/postgres";
 
 const buildApp = (options: FastifyServerOptions) => {
   const app = fastify(options);

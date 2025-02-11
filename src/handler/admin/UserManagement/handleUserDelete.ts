@@ -5,7 +5,6 @@ import pool from "../../../util/postgres";
 export const handleUserDelete = async (
   request: DeleteUserParamsRequest,
   reply: FastifyReply,
-  app: FastifyInstance
 ) => {
   try {
     const { id } = request.params;

@@ -5,7 +5,6 @@ import pool from "../../../util/postgres";
 export const handleAddSetMassage = async (
   request: AddSetMassageBodyRequest,
   reply: FastifyReply,
-  app: FastifyInstance
 ) => {
   try {
     const { mt_ids, ms_name, ms_type, ms_time, ms_detail, ms_image_names } =

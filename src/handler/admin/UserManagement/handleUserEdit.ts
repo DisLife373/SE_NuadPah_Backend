@@ -5,7 +5,6 @@ import pool from "../../../util/postgres";
 export const handleUserEdit = async (
   request: EditUserBodyRequest,
   reply: FastifyReply,
-  app: FastifyInstance
 ) => {
   try {
     const { id } = request.params;

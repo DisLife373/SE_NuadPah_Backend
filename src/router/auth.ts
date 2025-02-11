@@ -57,7 +57,7 @@ const authRouter = async (app: FastifyInstance) => {
   app.post(
     "/verifyotp",
     async (request: VerifyOTPBodyRequest, reply: FastifyReply) => {
-      const result = await handleVerifyOTP(request, reply, app);
+      const result = await handleVerifyOTP(request, reply);
       reply.send(result);
     }
   );
@@ -66,7 +66,7 @@ const authRouter = async (app: FastifyInstance) => {
   app.post(
     "/resetpw",
     async (request: AuthResetPWBodyRequest, reply: FastifyReply) => {
-      const result = await handleResetPW(request, reply, app);
+      const result = await handleResetPW(request, reply);
       reply.send(result);
     }
   );

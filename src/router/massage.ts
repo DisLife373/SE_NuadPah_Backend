@@ -26,13 +26,13 @@ import { handleSetRecommend } from "../handler/massage/Recommend/handleSetRecomm
 const massageRouter = async (app: FastifyInstance) => {
   // Fetch List of Single Massage Techniques
   app.get("/single-list", async (request: any, reply: FastifyReply) => {
-    const result = await handleGetSingleLists(reply, app);
+    const result = await handleGetSingleLists(reply);
     reply.send(result);
   });
 
   // Fetch List of Set Massage Techniques (not mapped)
   app.get("/set-list", async (request: any, reply: FastifyReply) => {
-    const result = await handleGetSetLists(reply, app);
+    const result = await handleGetSetLists(reply);
     reply.send(result);
   });
 
@@ -40,7 +40,7 @@ const massageRouter = async (app: FastifyInstance) => {
   app.post(
     "/single-detail",
     async (request: SingleMassageDetailBodyRequest, reply: FastifyReply) => {
-      const result = await handleGetSingleDetail(request, reply, app);
+      const result = await handleGetSingleDetail(request, reply);
       reply.send(result);
     }
   );
@@ -49,7 +49,7 @@ const massageRouter = async (app: FastifyInstance) => {
   app.post(
     "/set-detail",
     async (request: SetMassageDetailBodyRequest, reply: FastifyReply) => {
-      const result = await handleGetSetDetail(request, reply, app);
+      const result = await handleGetSetDetail(request, reply);
       reply.send(result);
     }
   );
@@ -61,7 +61,7 @@ const massageRouter = async (app: FastifyInstance) => {
       request: GetSingleMassageReviewsBodyRequest,
       reply: FastifyReply
     ) => {
-      const result = await handleGetSingleReviews(request, reply, app);
+      const result = await handleGetSingleReviews(request, reply);
       reply.send(result);
     }
   );
@@ -70,7 +70,7 @@ const massageRouter = async (app: FastifyInstance) => {
   app.post(
     "/set-reviews",
     async (request: GetSetMassageReviewsBodyRequest, reply: FastifyReply) => {
-      const result = await handleGetSetReviews(request, reply, app);
+      const result = await handleGetSetReviews(request, reply);
       reply.send(result);
     }
   );
@@ -79,7 +79,7 @@ const massageRouter = async (app: FastifyInstance) => {
   app.post(
     "/review-single",
     async (request: ReviewSingleMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleReviewSingleMassage(request, reply, app);
+      const result = await handleReviewSingleMassage(request, reply);
       reply.send(result);
     }
   );
@@ -88,7 +88,7 @@ const massageRouter = async (app: FastifyInstance) => {
   app.post(
     "/review-set",
     async (request: ReviewSetMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleReviewSetMassage(request, reply, app);
+      const result = await handleReviewSetMassage(request, reply);
       reply.send(result);
     }
   );
@@ -97,7 +97,7 @@ const massageRouter = async (app: FastifyInstance) => {
   app.post(
     "/record-single",
     async (request: RecordSingleMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleRecordSingleMassage(request, reply, app);
+      const result = await handleRecordSingleMassage(request, reply);
       reply.send(result);
     }
   );
@@ -106,7 +106,7 @@ const massageRouter = async (app: FastifyInstance) => {
   app.post(
     "/record-set",
     async (request: RecordSetMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleRecordSetMassage(request, reply, app);
+      const result = await handleRecordSetMassage(request, reply);
       reply.send(result);
     }
   );
@@ -114,7 +114,7 @@ const massageRouter = async (app: FastifyInstance) => {
   app.post(
     "/single-recommend",
     async (request: RecommendMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleSingleRecommend(request, reply, app);
+      const result = await handleSingleRecommend(request, reply);
       reply.send(result);
     }
   );
@@ -123,7 +123,7 @@ const massageRouter = async (app: FastifyInstance) => {
   app.post(
     "/set-recommend",
     async (request: RecommendMassageBodyRequest, reply: FastifyReply) => {
-      const result = await handleSetRecommend(request, reply, app);
+      const result = await handleSetRecommend(request, reply);
       reply.send(result);
     }
   );
