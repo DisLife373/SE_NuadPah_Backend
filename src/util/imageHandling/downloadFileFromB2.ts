@@ -14,10 +14,12 @@ export const downloadFileFromB2 = async (
     headers: { Authorization: authData.authorizationToken },
   });
 
-  if (!fileResponse.ok) throw new Error("File download failed");
+  if (fileResponse.status != 200) throw new Error("File download failed");
+
+  const buffer = Buffer.from(await fileResponse.arrayBuffer());
 
   return {
-    body: fileResponse.body,
+    body: buffer,
     contentType: fileResponse.headers.get("content-type"),
   };
 };

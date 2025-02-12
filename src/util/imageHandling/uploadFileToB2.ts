@@ -1,5 +1,6 @@
 import { fetch } from "undici";
 import { getUploadURL } from "./getUploadURL";
+import { genFileName } from "./genFileName";
 
 export const uploadFileToB2 = async (
   file: { filename: string; mimetype: string; data: Buffer },
@@ -7,25 +8,22 @@ export const uploadFileToB2 = async (
 ) => {
   const uploadUrlData: any = await getUploadURL();
 
-  console.log("Get Upload URL!");
-  console.log("------------------------------------------------------------");
+  const fileName = genFileName(file.filename);
 
   const uploadResponse = await fetch(uploadUrlData.uploadUrl, {
     method: "POST",
     headers: {
       Authorization: uploadUrlData.authorizationToken,
-      "X-Bz-File-Name": encodeURIComponent(file.filename),
+      "X-Bz-File-Name": encodeURIComponent(fileName),
       "Content-Type": file.mimetype,
       "X-Bz-Content-Sha1": "do_not_verify",
     },
     body: file.data,
   });
 
-  console.log("Get Upload Response!");
-  console.log("------------------------------------------------------------");
+  console.log(uploadResponse.status);
 
-  if (!uploadResponse.ok) throw new Error("File upload failed");
-  const uploadResult = await uploadResponse.json();
+  if (uploadResponse.status != 200) throw new Error("File upload failed");
 
   return `${uploadUrlData.downloadUrl}/file/${bucketName}/${file.filename}`;
 };

@@ -14,10 +14,11 @@ export const handleDownloadImage = async (
       config.bb_bucket_name
     );
 
-    reply.header("Content-Type", contentType || "application/octet-stream");
     return reply
+      .header("Content-Type", contentType)
+      .header("Content-Disposition", `attachment; filename="${fileName}"`)
       .status(200)
-      .send({ message: "File download Success!", data: body });
+      .send(body); // Recieve as Uint8List in Flutter
   } catch (err) {
     return reply
       .status(500)

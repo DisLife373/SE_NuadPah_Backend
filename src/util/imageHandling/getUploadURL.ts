@@ -5,22 +5,21 @@ import { authorizeB2 } from "./authorizeB2";
 export const getUploadURL = async () => {
   const authData: any = await authorizeB2();
 
-  console.log(authData);
-  console.log("------------------------------------------------------------");
+  const response = await fetch(
+    `${authData.apiUrl}/b2api/v2/b2_get_upload_url?bucketId=${config.bb_bucket_id}`,
+    {
+      method: "GET",
+      headers: { Authorization: authData.authorizationToken },
+    }
+  );
 
-  //   const response = await fetch(
-  //     `${authData.apiUrl}/b2api/v2/b2_get_upload_url`,
-  //     {
-  //       method: "POST",
-  //       headers: { Authorization: authData.authorizationToken },
-  //       body: JSON.stringify({ bucketId: config.bb_bucket_id }),
-  //     }
-  //   );
+  const data: any = await response.json();
 
-  //   console.log("Recieve Upload URL!");
-  //   console.log("------------------------------------------------------------");
+  if (response.status != 200) throw new Error("Failed to get upload URL");
 
-  //   if (!response.ok) throw new Error("Failed to get upload URL");
-  //   return response.json();
-  return {};
+  return {
+    downloadUrl: authData.downloadUrl,
+    authorizationToken: data.authorizationToken,
+    uploadUrl: data.uploadUrl,
+  };
 };

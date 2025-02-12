@@ -16,7 +16,6 @@ export const handleUploadImage = async (request: any, reply: FastifyReply) => {
   };
 
   try {
-    // อัปโหลดไฟล์ไปยัง Backblaze B2
     const url = await uploadFileToB2(fileData, config.bb_bucket_name);
     return reply
       .status(201)
