@@ -1,5 +1,4 @@
 import { fetch } from "undici";
-import config from "../../config/config";
 import { authorizeB2 } from "./authorizeB2";
 
 export const downloadFileFromB2 = async (

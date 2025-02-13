@@ -15,7 +15,7 @@ import { handleEditSetMassage } from "../handler/admin/MassageManagement/handleE
 import { handleDeleteSingleMassage } from "../handler/admin/MassageManagement/handleDeleteSingleMassage";
 import { handleDeleteSetMassage } from "../handler/admin/MassageManagement/handleDeleteSetMassage";
 import { handleUserEdit } from "../handler/admin/UserManagement/handleUserEdit";
-import { handleUserDelete } from "../handler/admin/UserManagement/handleUserDelete";;
+import { handleUserDelete } from "../handler/admin/UserManagement/handleUserDelete";
 import { handleUpdateReportStatus } from "../handler/admin/ReportManagement/handleUpdateReportStatus";
 
 const adminRouter = async (app: FastifyInstance) => {
@@ -80,7 +80,7 @@ const adminRouter = async (app: FastifyInstance) => {
 
   // Edit User Information
   app.put(
-    "/edit-user/:ms_id",
+    "/edit-user/:id",
     async (request: EditUserBodyRequest, reply: FastifyReply) => {
       const result = await handleUserEdit(request, reply);
       reply.send(result);
@@ -89,7 +89,7 @@ const adminRouter = async (app: FastifyInstance) => {
 
   // Delete User Account
   app.delete(
-    "/delete-user/:ms_id",
+    "/delete-user/:id",
     async (request: DeleteUserParamsRequest, reply: FastifyReply) => {
       const result = await handleUserDelete(request, reply);
       reply.send(result);
