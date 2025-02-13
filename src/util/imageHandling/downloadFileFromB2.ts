@@ -15,10 +15,7 @@ export const downloadFileFromB2 = async (
 
   if (fileResponse.status != 200) throw new Error("File download failed");
 
-  const buffer = Buffer.from(await fileResponse.arrayBuffer());
-
   return {
-    body: buffer,
-    contentType: fileResponse.headers.get("content-type"),
+    downloadUrl: `${fileResponse.url}?Authorization=${authData.authorizationToken}`,
   };
 };
