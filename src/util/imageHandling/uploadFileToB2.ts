@@ -25,5 +25,5 @@ export const uploadFileToB2 = async (
 
   if (uploadResponse.status != 200) throw new Error("File upload failed");
 
-  return `${uploadUrlData.downloadUrl}/file/${bucketName}/${file.filename}`;
+  return { fileName: file.filename };
 };

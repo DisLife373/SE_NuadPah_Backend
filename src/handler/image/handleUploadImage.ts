@@ -16,10 +16,10 @@ export const handleUploadImage = async (request: any, reply: FastifyReply) => {
   };
 
   try {
-    const url = await uploadFileToB2(fileData, config.bb_bucket_name);
+    const { fileName } = await uploadFileToB2(fileData, config.bb_bucket_name);
     return reply
       .status(201)
-      .send({ message: "File upload Success!", data: url });
+      .send({ message: "File upload Success!", data: fileName });
   } catch (err) {
     return reply
       .status(500)
