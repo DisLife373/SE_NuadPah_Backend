@@ -14,6 +14,7 @@ import { handleEditSingleMassage } from "../handler/admin/MassageManagement/hand
 import { handleEditSetMassage } from "../handler/admin/MassageManagement/handleEditSetMassage";
 import { handleDeleteSingleMassage } from "../handler/admin/MassageManagement/handleDeleteSingleMassage";
 import { handleDeleteSetMassage } from "../handler/admin/MassageManagement/handleDeleteSetMassage";
+import { handleGetUserList } from "../handler/admin/UserManagement/handleGetUserList";
 import { handleUserEdit } from "../handler/admin/UserManagement/handleUserEdit";
 import { handleUserDelete } from "../handler/admin/UserManagement/handleUserDelete";
 import { handleUpdateReportStatus } from "../handler/admin/ReportManagement/handleUpdateReportStatus";
@@ -77,6 +78,15 @@ const adminRouter = async (app: FastifyInstance) => {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   // User Management /////////////////////////////////////////////////////////////////////////////
+
+  // Get User List
+  app.get(
+    "/get-users",
+    async (request: any, reply: FastifyReply) => {
+      const result = await handleGetUserList(reply);
+      reply.send(result);
+    }
+  );
 
   // Edit User Information
   app.put(

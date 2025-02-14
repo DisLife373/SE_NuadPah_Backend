@@ -6,7 +6,7 @@ import pool from "../../../util/postgres";
 
 export const handleSingleRecommend = async (
   request: RecommendMassageBodyRequest,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   try {
     // Get email from request body to query user id
@@ -55,7 +55,7 @@ export const handleSingleRecommend = async (
             COALESCE(ur.avg_rating, 0) + COALESCE(ar.avg_rating, 0) * 0.6
           ) * CASE
                 WHEN EXISTS (
-                    SELECT * FROM "Favorite" f
+                    SELECT * FROM "SingleFavorite" f
                     WHERE f.id = $1 AND f.mt_id = mt.mt_id
                 )
               THEN 1.3 ELSE 1

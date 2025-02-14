@@ -8,7 +8,7 @@ export const handleGetSetLists = async (
     const client = await pool.connect();
     const { rows, rowCount } = await client.query(
       `
-        SELECT * FROM public."MassageSet";
+        SELECT * FROM public."MassageSet" ORDER BY ms_id;
       `
     );
 

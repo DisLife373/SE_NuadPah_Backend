@@ -4,7 +4,7 @@ import pool from "../../../util/postgres";
 
 export const handleDeleteSingleMassage = async (
   request: DeleteSingleMassageParamsRequest,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   try {
     const { mt_id } = request.params;
@@ -12,13 +12,13 @@ export const handleDeleteSingleMassage = async (
     const { rows } = await client.query(
       `
         DELETE FROM public."MassageTechnique"
-	    WHERE mt_id = $1 RETURNING *;
+	      WHERE mt_id = $1 RETURNING *;
       `,
       [mt_id]
     );
 
     client.release();
-    
+
     return reply
       .status(200)
       .send({ message: "Delete Single Massage Successfully", data: rows[0] });

@@ -6,7 +6,7 @@ import pool from "../../../util/postgres";
 
 export const handleSetRecommend = async (
   request: RecommendMassageBodyRequest,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   try {
     // Get email from request body to query user id
@@ -55,7 +55,7 @@ export const handleSetRecommend = async (
             COALESCE(ur.avg_rating, 0) + COALESCE(ar.avg_rating, 0) * 0.6
           ) * CASE
                 WHEN EXISTS (
-                    SELECT * FROM "Favorite" f
+                    SELECT * FROM "SetFavorite" f
                     WHERE f.id = $1 AND f.ms_id = ms.ms_id
                 )
               THEN 1.3 ELSE 1
@@ -72,7 +72,7 @@ export const handleSetRecommend = async (
 
     if (rowCount == null || rowCount < 1) {
       return reply.status(404).send({
-        error: "Have no any Single Massage Technique Recommendations",
+        error: "Have no any Set Massage Technique Recommendations",
       });
     }
 
